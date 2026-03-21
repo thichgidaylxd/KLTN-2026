@@ -86,7 +86,7 @@ export function Navbar() {
           >
             <a
               href="#"
-              className="flex items-center gap-1 px-5 py-2.5 rounded-2xl border-2 border-light-yellow-1 backdrop-blur-[10px] bg-white/0 hover:bg-white/10 transition-all duration-200"
+              className="flex items-center gap-1 px-5 py-3 rounded-xl border-2 border-light-yellow-1 backdrop-blur-[10px] bg-white/0 hover:bg-white/10 transition-all duration-200"
             >
               <span className="font-roboto text-[18px] font-medium leading-none text-light-yellow-1">
                 Đăng nhập
@@ -95,7 +95,7 @@ export function Navbar() {
             </a>
             <a
               href="#"
-              className="flex items-center gap-1 px-5 py-2.5 rounded-2xl bg-cta-yellow hover:bg-yellow-300 transition-colors duration-200"
+              className="flex items-center gap-1 px-5 py-3 rounded-xl bg-cta-yellow hover:bg-yellow-300 transition-colors duration-200"
             >
               <span className="font-roboto text-[18px] font-medium leading-none text-dark-olive">
                 Tạo Tài Khoản
