@@ -1,18 +1,15 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import CornBackground from "../../assets/Corn-Background.png";
 import Water from "../../assets/Water.png";
-import CornIntro from "../../assets/Corn-intro.png";
 import LogoIntro from "../../assets/Logo-intro.png";
 import paddyintro from "../../assets/paddy-intro.png";
 export function HeroSection() {
   return (
-    <section className="relative w-full h-[990px] overflow-hidden">
-      {/* Background Image */}
-      <img
-        src={CornBackground}
-        alt="Corn field background"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
+    <section className="relative w-full min-h-[calc(100vh+100px)]">
+      {/* Background vẫn clip bình thường */}
+      <div className="absolute inset-0 overflow-hidden">
+        <img src={CornBackground} className="w-full h-full object-cover" />
+      </div>
 
       {/* Content Layer */}
       <div className="relative z-10 w-full h-full">
@@ -68,7 +65,7 @@ export function HeroSection() {
 
         {/* Glassmorphism Card - Right Side */}
         <div
-          className="absolute right-[121px] top-[253px] w-[323px] h-[451px] rounded-[40px] overflow-hidden backdrop-blur-[14px]"
+          className="absolute right-[121px] top-[253px] w-[323px] h-[451px] rounded-[40px] overflow-hidden backdrop-blur-[8px]"
           style={{
             background:
               "linear-gradient(0deg, rgba(236, 240, 164, 0.4) 0%, rgba(220, 218, 173, 0.4) 100%)",
@@ -90,12 +87,7 @@ export function HeroSection() {
           </p>
         </div>
 
-        {/* Overlapping Corn Field Images - Bottom Right */}
-        <img
-          src={CornIntro}
-          alt="Corn field 1"
-          className="absolute left-[493px] top-[600px] w-[313px] h-[359px] object-cover"
-        />
+
       </div>
     </section>
   );

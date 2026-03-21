@@ -27,7 +27,7 @@ export function Navbar() {
         <div className="flex items-center gap-[40px] xl:gap-[60px]">
           {navItems.map((item) => (
             <a key={item} href="#" className="flex items-center gap-1.5 group">
-              <span className="font-roboto text-[16px] font-black leading-none text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200">
+              <span className="font-roboto text-[16px] font-semibold leading-none text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200">
                 {item}
               </span>
               <ChevronDownIcon className="w-5 h-5 text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200" />
