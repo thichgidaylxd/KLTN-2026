@@ -40,7 +40,6 @@ export function Navbar() {
       >
         {/* Nav content */}
         <div className="flex items-center justify-between px-[78px] h-[80px]">
-
           {/* Logo — slide down + fade */}
           <a
             href="#"
@@ -53,7 +52,9 @@ export function Navbar() {
               className={`h-[50px] w-auto object-contain transition-all duration-[10ms] ease-out
               ${mounted ? "animate-logo-spin" : ""}`}
               style={{
-                animation: mounted ? "logoSpin 1s ease-in-out 0.1s 1 forwards" : "none",
+                animation: mounted
+                  ? "logoSpin 1s ease-in-out 0.1s 1 forwards"
+                  : "none",
               }}
             />
             <span className="font-prompt text-[38px] font-extrabold leading-none text-light-yellow-2">
@@ -69,7 +70,9 @@ export function Navbar() {
                 href="#"
                 className={`flex items-center gap-1.5 group transition-all duration-[600ms] ease-out
                 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-3"}`}
-                style={{ transitionDelay: mounted ? `${150 + i * 80}ms` : "0ms" }}
+                style={{
+                  transitionDelay: mounted ? `${150 + i * 80}ms` : "0ms",
+                }}
               >
                 <span className="font-roboto text-[16px] font-semibold leading-none text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200">
                   {item}
@@ -81,26 +84,26 @@ export function Navbar() {
 
           {/* Buttons — slide down + fade, delayed */}
           <div
-            className={`flex items-center gap-3 shrink-0 transition-all duration-[700ms] ease-out delay-[600ms]
+            className={`flex items-center gap-2.5 shrink-0 transition-all duration-[700ms] ease-out delay-[600ms]
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
             <a
               href="#"
-              className="flex items-center gap-1 px-5 py-3 rounded-xl border-2 border-light-yellow-1 backdrop-blur-[10px] bg-white/0 hover:bg-white/10 transition-all duration-200"
+              className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15 transition-all duration-200 group"
             >
-              <span className="font-roboto text-[18px] font-medium leading-none text-light-yellow-1">
+              <span className="font-roboto text-[16px] font-semibold leading-none text-light-yellow-1 group-hover:text-white transition-colors duration-200">
                 Đăng nhập
               </span>
-              <ArrowUpRightIcon className="w-5 h-5 text-light-yellow-1" />
+              <ArrowUpRightIcon className="w-4 h-4 text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </a>
             <a
               href="#"
-              className="flex items-center gap-1 px-5 py-3 rounded-xl bg-cta-yellow hover:bg-yellow-300 transition-colors duration-200"
+              className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow hover:bg-yellow-400 shadow-lg hover:shadow-xl hover:shadow-yellow-400/50 transition-all duration-200 group"
             >
-              <span className="font-roboto text-[18px] font-medium leading-none text-dark-olive">
+              <span className="font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-200">
                 Tạo Tài Khoản
               </span>
-              <ArrowUpRightIcon className="w-5 h-5 text-dark-olive" />
+              <ArrowUpRightIcon className="w-4 h-4 text-dark-olive group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </a>
           </div>
         </div>

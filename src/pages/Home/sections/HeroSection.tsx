@@ -1,9 +1,9 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import CornBackground from "../../assets/Corn-Background.png";
-import Water from "../../assets/Water.png";
-import LogoIntro from "../../assets/Logo-intro.png";
-import paddyintro from "../../assets/paddy-intro.png";
+import CornBackground from "../../../assets/Corn-Background.png";
+import Water from "../../../assets/Water.png";
+import LogoIntro from "../../../assets/Logo-intro.png";
+import paddyintro from "../../../assets/paddy-intro.png";
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);

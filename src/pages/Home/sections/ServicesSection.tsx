@@ -1,4 +1,5 @@
 import { BotIcon, CloudSunIcon, BarChart2Icon, LeafIcon } from "lucide-react";
+import { useReveal } from "@/components/hooks/useReveal";
 
 const services = [
   {
@@ -28,12 +29,19 @@ const services = [
 ];
 
 export function ServicesSection() {
+  const { ref: headRef, visible: headVisible } = useReveal(0.2);
+  const { ref: gridRef, visible: gridVisible } = useReveal(0.1);
+
   return (
     <section
       id="section-3"
       className="w-full bg-[#1A2E10] py-[100px] px-[93px]"
     >
-      <div className="text-center mb-14">
+      <div
+        ref={headRef}
+        className={`text-center mb-14 transition-all duration-[700ms] ease-out
+          ${headVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+      >
         <span className="font-roboto text-[13px] font-semibold text-green-400 uppercase tracking-widest">
           Dịch Vụ
         </span>
@@ -47,11 +55,16 @@ export function ServicesSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6 max-w-[860px] mx-auto">
+      <div
+        ref={gridRef}
+        className="grid grid-cols-2 gap-6 max-w-[860px] mx-auto"
+      >
         {services.map((s, i) => (
           <div
             key={i}
-            className="bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-colors group"
+            className={`bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 transition-all duration-[600ms] ease-out
+              ${gridVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
+            style={{ transitionDelay: gridVisible ? `${i * 120}ms` : "0ms" }}
           >
             <div
               className={`w-14 h-14 rounded-2xl ${s.bg} flex items-center justify-center mb-5`}

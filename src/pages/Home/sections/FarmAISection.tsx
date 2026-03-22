@@ -1,5 +1,3 @@
-
-
 export function FarmAISection() {
   return (
     <section
@@ -13,7 +11,7 @@ export function FarmAISection() {
         <div className="flex flex-col items-center">
           {/* Seedling + Label */}
           <div className="flex items-center gap-1">
-           
+            {/* Placeholder for future content */}
           </div>
         </div>
       </div>
