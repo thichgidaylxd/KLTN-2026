@@ -4,6 +4,11 @@ import LogoBrowser from "../../assets/Logo-browser.png";
 
 const navItems = ["Trang Chủ", "Dịch vụ", "Tin tức", "Triển khai", "Kế Hoạch"];
 
+interface NavbarProps {
+  hideCreateButton?: boolean;
+  hideDivider?: boolean;
+}
+
 const spinStyle = `
   @keyframes logoSpin {
     0%   { transform: rotate(0deg) scale(0.8); opacity: 0; }
@@ -12,7 +17,10 @@ const spinStyle = `
   }
 `;
 
-export function Navbar() {
+export function Navbar({
+  hideCreateButton = false,
+  hideDivider = false,
+}: NavbarProps) {
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -96,23 +104,32 @@ export function Navbar() {
               </span>
               <ArrowUpRightIcon className="w-4 h-4 text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
             </a>
-            <a
-              href="#"
-              className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow hover:bg-yellow-400 shadow-lg hover:shadow-xl hover:shadow-yellow-400/50 transition-all duration-200 group"
-            >
-              <span className="font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-200">
-                Tạo Tài Khoản
-              </span>
-              <ArrowUpRightIcon className="w-4 h-4 text-dark-olive group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-            </a>
+            {!hideCreateButton && (
+              <a
+                href="#"
+                className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow hover:bg-yellow-400 shadow-lg hover:shadow-xl hover:shadow-yellow-400/50 transition-all duration-200 group"
+              >
+                <span className="font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-200">
+                  Tạo Tài Khoản
+                </span>
+                <ArrowUpRightIcon className="w-4 h-4 text-dark-olive group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+              </a>
+            )}
           </div>
         </div>
 
         {/* Divider */}
-        <div
-          className={`w-full h-px bg-white/20 transition-all duration-[800ms] ease-out delay-[700ms]
-          ${mounted ? "opacity-100" : "opacity-0"}`}
-        />
+        {!hideDivider && (
+          <div
+            className={`w-full h-px transition-all duration-[800ms] ease-out delay-[700ms]
+    ${mounted ? "opacity-100" : "opacity-0"}`}
+            style={{
+              background:
+                "linear-gradient(to right, transparent, #F5C842 30%, #7EC87A 70%, transparent)",
+              boxShadow: "0 0 14px 3px rgba(200,210,80,0.45)",
+            }}
+          />
+        )}
       </nav>
     </>
   );

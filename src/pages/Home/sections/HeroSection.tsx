@@ -1,5 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Navbar } from "../../../components/layout/Navbar";
 import CornBackground from "../../../assets/Corn-Background.png";
 import Water from "../../../assets/Water.png";
 import LogoIntro from "../../../assets/Logo-intro.png";
@@ -16,6 +17,7 @@ export function HeroSection() {
 
   return (
     <section className="relative w-full min-h-[calc(100vh+100px)] pb-0">
+      <Navbar />
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden">
         <img
@@ -34,7 +36,7 @@ export function HeroSection() {
             {/* "AI" text */}
             <div className="relative">
               <span
-                className={`font-playfair text-[280px] font-semibold leading-none text-light-yellow-2 block mr-[30px] mt-[28px]
+                className={`font-playfair text-[200px] font-semibold leading-none text-light-yellow-2 block mr-[30px] mt-[40px]
                   transition-all duration-[900ms] ease-out delay-[200ms]
                   ${mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"}`}
               >
@@ -44,7 +46,7 @@ export function HeroSection() {
               <img
                 src={Water}
                 alt="Corn drop"
-                className={`absolute top-[2px] left-[208px] w-[41px] h-[60px] object-contain
+                className={`absolute top-[2px] left-[145px] w-[41px] h-[60px] object-contain
                   transition-all duration-[700ms] ease-out delay-[900ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}`}
               />
@@ -52,21 +54,21 @@ export function HeroSection() {
 
             {/* Vertical line */}
             <div
-              className={`w-[1px] bg-white/30  mt-[28px] mx-[-24px] transition-all duration-[600ms] ease-out delay-[400ms]
+              className={`w-[1px] bg-gradient-to-b from-light-yellow-1/50 via-light-yellow-2/30 to-transparent mt-[28px] mx-[-24px] transition-all duration-[600ms] ease-out delay-[400ms]
                 ${mounted ? "h-[327px] opacity-100" : "h-0 opacity-0"}`}
             />
 
             {/* MÙA VỤ / KHỞI SẮC */}
             <div className="mt-[67px] ml-[40px] overflow-hidden">
               <h1
-                className={`font-playfair text-[100px] font-semibold leading-none text-light-yellow-3
+                className={`font-playfair text-[70px] font-semibold leading-none text-light-yellow-3
                   transition-all duration-[800ms] ease-out delay-[500ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
                 MÙA VỤ
               </h1>
               <h1
-                className={`font-playfair text-[100px] font-semibold leading-none text-light-yellow-3 mt-6
+                className={`font-playfair text-[70px] font-semibold leading-none text-light-yellow-3 mt-6
                   transition-all duration-[800ms] ease-out delay-[650ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
@@ -130,7 +132,16 @@ export function HeroSection() {
       </div>
 
       {/* Divider line at bottom */}
-      <div className="absolute left-[2px] top-[710px] w-full h-px bg-white/40" />
+
+      {/* Divider line at bottom */}
+      <div
+        className="absolute left-0 top-[710px] w-full h-px"
+        style={{
+          background:
+            "linear-gradient(to right, transparent, #F5C842 30%, #7EC87A 70%, transparent)",
+          boxShadow: "0 0 14px 3px rgba(200,210,80,0.45)",
+        }}
+      />
     </section>
   );
 }
