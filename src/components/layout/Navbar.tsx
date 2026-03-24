@@ -11,6 +11,7 @@ interface NavbarProps {
   hideDivider?: boolean;
   backgroundImage?: string;
   hideLoginButton?: boolean;
+  hideNavBackground?: boolean;
 }
 
 const spinStyle = `
@@ -26,6 +27,7 @@ export function Navbar({
   hideDivider = false,
   backgroundImage = CornBackground,
   hideLoginButton = false,
+  hideNavBackground = false,
 }: NavbarProps) {
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -53,7 +55,9 @@ export function Navbar({
         }`}
         style={{
           backgroundImage:
-            scrolled || !backgroundImage ? "none" : `url(${backgroundImage})`,
+            scrolled || !backgroundImage || hideNavBackground
+              ? "none"
+              : `url(${backgroundImage})`,
         }}
         aria-label="Main navigation"
       >

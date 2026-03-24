@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Navbar } from "../../components/layout/Navbar";
 import LogoBrowser from "../../assets/Logo-browser.png";
-import RegisterOTPBg from "../../assets/Register-OTP.png";
+import RegisterOTP from "../../assets/Register-OTP.png";
 
 interface OTPVerificationProps {
   email?: string;
@@ -89,14 +89,17 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
     <div
       className="relative min-h-screen w-full overflow-hidden"
       style={{
-        backgroundImage: `url(${RegisterOTPBg})`,
-
+        backgroundImage: `url(${RegisterOTP})`,
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
       }}
     >
       {/* Navbar */}
-      <Navbar hideCreateButton={true} hideDivider={true} />
+      <Navbar
+        hideCreateButton={true}
+        hideDivider={true}
+        hideNavBackground={true}
+      />
 
       {/* Content */}
       <>
