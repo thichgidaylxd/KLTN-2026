@@ -106,7 +106,7 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
           <div className="relative z-10 flex items-center justify-center min-h-screen">
             <div className="w-full max-w-md px-6 py-8">
               {/* Logo Icon */}
-              <div className="flex flex-col items-center gap-6 mb-8">
+              <div className="flex flex-col items-center gap-6">
                 <div className="text-center">
                   <div className="inline-flex items-center justify-center w-20 h-20">
                     <img

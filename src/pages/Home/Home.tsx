@@ -8,10 +8,12 @@ import CornIntro from "../../assets/Corn-intro.png";
 
 export function HomePage() {
   return (
-    <div className="w-full min-h-screen bg-white overflow-x-hidden">
-      <div className="relative">
+    <div className="w-full min-h-screen overflow-x-hidden">
+      {/* Navbar */}
+      <Navbar />
+
+      <div className="relative pt-[80px]">
         <div className="relative">
-          <Navbar />
           <HeroSection />
         </div>
 
@@ -30,10 +32,11 @@ export function HomePage() {
         />
       </div>
 
-      <IntroSection />
-
-      <ServicesSection />
-      <ContactSection />
+      <div className="relative bg-white">
+        <IntroSection />
+        <ServicesSection />
+        <ContactSection />
+      </div>
     </div>
   );
 }

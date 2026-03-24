@@ -3,6 +3,7 @@ import { lazy } from "react";
 // Public page components
 const Home = lazy(() => import("../pages/Home/Home"));
 const Register = lazy(() => import("../pages/Register/Register"));
+const Login = lazy(() => import("../pages/Login/Login"));
 const About = lazy(() => import("../pages/About/About"));
 
 /**
@@ -13,6 +14,10 @@ export const publicRoutes = [
   {
     path: "/",
     component: Home,
+  },
+  {
+    path: "/login",
+    component: Login,
   },
   {
     path: "/register",

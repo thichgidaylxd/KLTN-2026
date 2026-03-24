@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Navbar } from "../../components/layout/Navbar";
-import LogoBrowser from "../../assets/Logo-browser.png";
 import LoginBackground from "../../assets/Login-Background.png";
+import LogoBrowser from "../../assets/Logo-browser.png";
 
 const spinStyle = `
   @keyframes logoSpin {
@@ -12,16 +12,12 @@ const spinStyle = `
   }
 `;
 
-export default function Register() {
+export default function Login() {
   const [mounted, setMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
   useEffect(() => {
@@ -37,10 +33,10 @@ export default function Register() {
     }));
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Register:", formData);
-    // TODO: Call API register
+    console.log("Login:", formData);
+    // TODO: Call API login
   };
 
   return (
@@ -62,15 +58,20 @@ export default function Register() {
       </div>
 
       {/* Navbar */}
-      <Navbar hideCreateButton={true} hideDivider={true} backgroundImage="" />
+      <Navbar
+        hideCreateButton={false}
+        hideDivider={true}
+        backgroundImage=""
+        hideLoginButton={true}
+      />
 
       <div
-        className="relative h-screen flex items-center justify-center overflow-hidden pt-[80px]"
+        className="relative min-h-screen flex items-center justify-center overflow-y-auto pt-[80px]"
         style={{ zIndex: 10 }}
       >
-        {/* Register Form Container - Modal */}
+        {/* Login Form Container - Modal */}
         <div
-          className={`relative w-full max-w-[380px] px-6 py-4 transition-all duration-700 ease-out z-20 flex flex-col justify-center bg-white rounded-3xl shadow-2xl
+          className={`relative w-full max-w-[450px] px-12 py-7 transition-all duration-700 ease-out z-20 flex flex-col justify-center bg-white rounded-3xl shadow-2xl
           ${mounted ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
         >
           {/* Logo + Brand Name */}
@@ -81,7 +82,7 @@ export default function Register() {
             <img
               src={LogoBrowser}
               alt="FamerAI corn logo"
-              className={`h-[35px] w-auto object-contain transition-all duration-[10ms] ease-out
+              className={`h-[45px] w-auto object-contain transition-all duration-[10ms] ease-out
               ${mounted ? "animate-logo-spin" : ""}`}
               style={{
                 animation: mounted
@@ -90,7 +91,7 @@ export default function Register() {
               }}
             />
             <span
-              className="font-prompt text-[22px] font-extrabold leading-none"
+              className="font-prompt text-[28px] font-extrabold leading-none"
               style={{ color: "#5C5E33" }}
             >
               FamerAI
@@ -99,56 +100,22 @@ export default function Register() {
 
           {/* Heading */}
           <div
-            className={`mb-2 text-center transition-all duration-[700ms] ease-out delay-100
+            className={`mb-5 text-center transition-all duration-[700ms] ease-out delay-100
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
-            <h1 className="font-prompt text-[16px] font-bold text-gray-800 mb-0">
-              Tạo Trang Trại Ngay!
+            <h1 className="font-prompt text-[20px] font-bold text-gray-800 mb-0">
+              Chào Mừng Bạn Trở Lại!
             </h1>
+            <p className="font-roboto text-[13px] text-gray-600 mt-1">
+              Tạo trang trại thông minh với công nghệ AI của FamerAI
+            </p>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleRegister} className="space-y-2">
-            {/* Name Row */}
-            <div
-              className={`grid grid-cols-2 gap-2 transition-all duration-[700ms] ease-out delay-150
-              ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
-            >
-              <div>
-                <label className="block font-roboto text-[13px] font-medium text-gray-700 mb-1">
-                  Họ
-                </label>
-                <input
-                  type="text"
-                  name="firstName"
-                  placeholder="Nguyễn Văn..."
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
-                  focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
-                  font-roboto text-[13px] placeholder:text-gray-400 bg-gray-50/50"
-                />
-              </div>
-              <div>
-                <label className="block font-roboto text-[13px] font-medium text-gray-700 mb-1">
-                  Tên
-                </label>
-                <input
-                  type="text"
-                  name="lastName"
-                  placeholder="Nhập tên"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
-                  focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
-                  font-roboto text-[13px] placeholder:text-gray-400 bg-gray-50/50"
-                />
-              </div>
-            </div>
-
+          <form onSubmit={handleLogin} className="space-y-3.5">
             {/* Email */}
             <div
-              className={`transition-all duration-[700ms] ease-out delay-200
+              className={`transition-all duration-[700ms] ease-out delay-150
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
             >
               <label className="block font-roboto text-[13px] font-medium text-gray-700 mb-2">
@@ -160,7 +127,7 @@ export default function Register() {
                 placeholder="example@gmail.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg
                 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
                 font-roboto text-[13px] placeholder:text-gray-400 bg-gray-50/50"
               />
@@ -168,20 +135,20 @@ export default function Register() {
 
             {/* Password */}
             <div
-              className={`transition-all duration-[700ms] ease-out delay-250
+              className={`transition-all duration-[700ms] ease-out delay-200
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
             >
               <label className="block font-roboto text-[13px] font-medium text-gray-700 mb-2">
-                Mật khẩu
+                Password
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Phải mạnh"
+                  placeholder="••••••••••"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-3 py-1.5 pr-10 border border-gray-300 rounded-lg
+                  className="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
                   font-roboto text-[13px] placeholder:text-gray-400 bg-gray-50/50"
                 />
@@ -199,48 +166,28 @@ export default function Register() {
               </div>
             </div>
 
-            {/* Confirm Password */}
+            {/* Forgot Password Link */}
             <div
-              className={`transition-all duration-[700ms] ease-out delay-300
-              ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
+              className={`text-right transition-all duration-[700ms] ease-out delay-250
+              ${mounted ? "opacity-100" : "opacity-0"}`}
             >
-              <label className="block font-roboto text-[13px] font-medium text-gray-700 mb-2">
-                Xác nhận mật khẩu
-              </label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  placeholder="Phải mạnh"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className="w-full px-3 py-1.5 pr-10 border border-gray-300 rounded-lg
-                  focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
-                  font-roboto text-[13px] placeholder:text-gray-400 bg-gray-50/50"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showConfirmPassword ? (
-                    <EyeOffIcon className="w-4 h-4" />
-                  ) : (
-                    <EyeIcon className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
+              <a
+                href="#"
+                className="font-roboto text-[12px] text-dark-olive hover:text-dark-olive/80 transition-colors duration-200"
+              >
+                Quên mật khẩu?
+              </a>
             </div>
 
-            {/* Create Account Button */}
+            {/* Login Button */}
             <button
               type="submit"
-              className={`w-full py-1.5 mt-1 rounded-lg bg-dark-olive hover:bg-dark-olive/90
-              transition-all duration-300 font-roboto text-[13px] font-semibold
+              className={`w-full py-2.5 mt-3 rounded-lg bg-dark-olive hover:bg-dark-olive/90
+              transition-all duration-300 font-roboto text-[14px] font-semibold
               text-white relative overflow-hidden group
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
               style={{
-                transitionDelay: mounted ? "350ms" : "0ms",
+                transitionDelay: mounted ? "300ms" : "0ms",
               }}
             >
               <div
@@ -248,13 +195,13 @@ export default function Register() {
               translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
               />
               <span className="relative z-10 flex items-center justify-center gap-2">
-                Tạo Tài Khoản
+                Đăng nhập
               </span>
             </button>
 
             {/* Divider */}
             <div
-              className={`flex items-center gap-3 my-1 transition-all duration-[700ms] ease-out delay-400
+              className={`flex items-center gap-3 my-3 transition-all duration-[700ms] ease-out delay-350
               ${mounted ? "opacity-100" : "opacity-0"}`}
             >
               <div className="flex-1 h-px bg-gray-300" />
@@ -264,15 +211,15 @@ export default function Register() {
               <div className="flex-1 h-px bg-gray-300" />
             </div>
 
-            {/* Google Sign Up */}
+            {/* Google Sign In */}
             <button
               type="button"
-              className={`w-full py-1.5 rounded-lg border border-gray-300
+              className={`w-full py-2.5 rounded-lg border border-gray-300
               hover:border-gray-400 hover:bg-gray-50 transition-all duration-300
               flex items-center justify-center gap-2
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
               style={{
-                transitionDelay: mounted ? "450ms" : "0ms",
+                transitionDelay: mounted ? "400ms" : "0ms",
               }}
             >
               <svg
@@ -298,22 +245,22 @@ export default function Register() {
                 />
               </svg>
               <span className="font-roboto text-[13px] font-medium text-gray-700">
-                Đăng ký với Google
+                Đăng nhập bằng Google
               </span>
             </button>
 
-            {/* Login Link */}
+            {/* Register Link */}
             <div
-              className={`text-center mt-2 transition-all duration-[700ms] ease-out delay-500
+              className={`text-center mt-2 transition-all duration-[700ms] ease-out delay-450
               ${mounted ? "opacity-100" : "opacity-0"}`}
             >
               <span className="font-roboto text-[13px] text-gray-600">
-                Đã có tài khoản?{" "}
+                Chưa có tài khoản?{" "}
                 <a
-                  href="/login"
+                  href="/register"
                   className="font-semibold text-gray-800 hover:text-dark-olive transition-colors duration-200"
                 >
-                  Đăng nhập
+                  Đăng ký
                 </a>
               </span>
             </div>

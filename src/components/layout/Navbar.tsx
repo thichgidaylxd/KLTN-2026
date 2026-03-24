@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { ChevronDownIcon, ArrowUpRightIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import LogoBrowser from "../../assets/Logo-browser.png";
+import CornBackground from "../../assets/Corn-Background.png";
 
 const navItems = ["Trang Chủ", "Dịch vụ", "Tin tức", "Triển khai", "Kế Hoạch"];
 
 interface NavbarProps {
   hideCreateButton?: boolean;
   hideDivider?: boolean;
+  backgroundImage?: string;
+  hideLoginButton?: boolean;
 }
 
 const spinStyle = `
@@ -20,9 +24,12 @@ const spinStyle = `
 export function Navbar({
   hideCreateButton = false,
   hideDivider = false,
+  backgroundImage = CornBackground,
+  hideLoginButton = false,
 }: NavbarProps) {
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   // Entrance animation
   useEffect(() => {
@@ -41,16 +48,24 @@ export function Navbar({
     <>
       <style>{spinStyle}</style>
       <nav
-        className={`absolute top-0 left-0 w-full z-30 transition-all duration-500
-          ${scrolled ? "backdrop-blur-md bg-black/30 shadow-lg" : ""}
-        `}
+        className={`fixed top-0 left-0 w-full transition-all duration-500 bg-cover bg-fixed bg-top ${
+          scrolled ? "z-50 bg-white shadow-lg" : "z-50"
+        }`}
+        style={{
+          backgroundImage:
+            scrolled || !backgroundImage ? "none" : `url(${backgroundImage})`,
+        }}
         aria-label="Main navigation"
       >
         {/* Nav content */}
-        <div className="flex items-center justify-between px-[78px] h-[80px]">
+        <div className="relative flex items-center justify-between px-[78px] h-[80px]">
           {/* Logo — slide down + fade */}
           <a
-            href="#"
+            href="/"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/");
+            }}
             className={`flex items-center gap-1 shrink-0 transition-all duration-[700ms] ease-out
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
@@ -65,7 +80,11 @@ export function Navbar({
                   : "none",
               }}
             />
-            <span className="font-prompt text-[38px] font-extrabold leading-none text-light-yellow-2">
+            <span
+              className={`font-prompt text-[38px] font-extrabold leading-none transition-colors duration-500 ${
+                scrolled ? "text-dark-olive" : "text-light-yellow-2"
+              }`}
+            >
               FamerAI
             </span>
           </a>
@@ -82,10 +101,22 @@ export function Navbar({
                   transitionDelay: mounted ? `${150 + i * 80}ms` : "0ms",
                 }}
               >
-                <span className="font-roboto text-[16px] font-semibold leading-none text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200">
+                <span
+                  className={`font-roboto text-[16px] font-medium leading-none transition-colors duration-500 ${
+                    scrolled
+                      ? "text-dark-olive group-hover:text-cta-yellow"
+                      : "text-light-yellow-1 group-hover:text-cta-yellow"
+                  }`}
+                >
                   {item}
                 </span>
-                <ChevronDownIcon className="w-5 h-5 text-light-yellow-1 group-hover:text-cta-yellow transition-colors duration-200" />
+                <ChevronDownIcon
+                  className={`w-5 h-5 transition-colors duration-500 ${
+                    scrolled
+                      ? "text-dark-olive group-hover:text-cta-yellow"
+                      : "text-light-yellow-1 group-hover:text-cta-yellow"
+                  }`}
+                />
               </a>
             ))}
           </div>
@@ -95,25 +126,55 @@ export function Navbar({
             className={`flex items-center gap-2.5 shrink-0 transition-all duration-[700ms] ease-out delay-[600ms]
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
-            <a
-              href="#"
-              className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15 transition-all duration-200 group"
-            >
-              <span className="font-roboto text-[16px] font-semibold leading-none text-light-yellow-1 group-hover:text-white transition-colors duration-200">
-                Đăng nhập
-              </span>
-              <ArrowUpRightIcon className="w-4 h-4 text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-            </a>
-            {!hideCreateButton && (
-              <a
-                href="#"
-                className="flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow hover:bg-yellow-400 shadow-lg hover:shadow-xl hover:shadow-yellow-400/50 transition-all duration-200 group"
+            {!hideLoginButton && (
+              <button
+                onClick={() => navigate("/login")}
+                className={`flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 transition-all duration-200 group ${
+                  scrolled
+                    ? "border-gray-300 bg-gray-50 hover:bg-gray-100"
+                    : "border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15"
+                }`}
               >
-                <span className="font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-200">
+                <span
+                  className={`font-roboto text-[16px] font-semibold leading-none transition-colors duration-200 ${
+                    scrolled
+                      ? "text-gray-800 group-hover:text-dark-olive"
+                      : "text-light-yellow-1 group-hover:text-white"
+                  }`}
+                >
+                  Đăng nhập
+                </span>
+                <ArrowUpRightIcon
+                  className={`w-4 h-4 transition-all duration-200 ${
+                    scrolled
+                      ? "text-gray-800 group-hover:text-dark-olive group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      : "text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  }`}
+                />
+              </button>
+            )}
+            {!hideCreateButton && (
+              <button
+                onClick={() => navigate("/register")}
+                className="relative flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow transition-all duration-300 overflow-hidden group"
+              >
+                {/* Lớp màu nền chạy từ trái sang phải */}
+                <div
+                  className="absolute inset-0 w-full h-full bg-yellow-300 translate-x-[-100%] 
+               group-hover:translate-x-0 transition-transform duration-500 ease-in-out"
+                />
+
+                {/* Nội dung nằm trên lớp nền (z-10) */}
+                <span className="relative z-10 font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-300">
                   Tạo Tài Khoản
                 </span>
-                <ArrowUpRightIcon className="w-4 h-4 text-dark-olive group-hover:text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-              </a>
+
+                <ArrowUpRightIcon
+                  className="relative z-10 w-4 h-4 text-dark-olive group-hover:text-black 
+               group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
+               transition-all duration-300"
+                />
+              </button>
             )}
           </div>
         </div>
@@ -122,7 +183,7 @@ export function Navbar({
         {!hideDivider && (
           <div
             className={`w-full h-px transition-all duration-[800ms] ease-out delay-[700ms]
-    ${mounted ? "opacity-100" : "opacity-0"}`}
+    ${mounted && !scrolled ? "opacity-100" : "opacity-0"}`}
             style={{
               background:
                 "linear-gradient(to right, transparent, #F5C842 30%, #7EC87A 70%, transparent)",
@@ -130,6 +191,9 @@ export function Navbar({
             }}
           />
         )}
+
+        {/* Bottom divider when scrolled */}
+        {scrolled && <div className="w-full h-px bg-gray-200" />}
       </nav>
     </>
   );

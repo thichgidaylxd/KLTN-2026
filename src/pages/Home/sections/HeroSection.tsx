@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Navbar } from "../../../components/layout/Navbar";
+import { useNavigate } from "react-router-dom";
 import CornBackground from "../../../assets/Corn-Background.png";
 import Water from "../../../assets/Water.png";
 import LogoIntro from "../../../assets/Logo-intro.png";
@@ -8,6 +8,7 @@ import paddyintro from "../../../assets/paddy-intro.png";
 
 export function HeroSection() {
   const [mounted, setMounted] = useState(false);
+  const navigate = useNavigate();
 
   // Trigger entrance animations after mount
   useEffect(() => {
@@ -16,10 +17,9 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-[calc(100vh+100px)] pb-0">
-      <Navbar />
-      {/* Background */}
-      <div className="absolute inset-0 overflow-hidden">
+    <section className="relative w-full min-h-[calc(120vh-80px)] pb-0">
+      {/* Background - Scrolls with content */}
+      <div className="absolute inset-0 overflow-hidden -z-10">
         <img
           src={CornBackground}
           className={`w-full h-full object-cover transition-all duration-[1800ms] ease-out ${
@@ -31,12 +31,12 @@ export function HeroSection() {
       {/* Content Layer */}
       <div className="relative z-10 w-full h-full">
         {/* Main Hero Text Block */}
-        <div className="absolute left-[93px] top-[194px]">
+        <div className="absolute left-[93px] top-[144px]">
           <div className="flex items-start">
             {/* "AI" text */}
             <div className="relative">
               <span
-                className={`font-playfair text-[200px] font-semibold leading-none text-light-yellow-2 block mr-[30px] mt-[40px]
+                className={`font-playfair text-[220px] font-semibold leading-none text-light-yellow-2 block mr-[30px] mt-[40px]
                   transition-all duration-[900ms] ease-out delay-[200ms]
                   ${mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"}`}
               >
@@ -46,7 +46,7 @@ export function HeroSection() {
               <img
                 src={Water}
                 alt="Corn drop"
-                className={`absolute top-[2px] left-[145px] w-[41px] h-[60px] object-contain
+                className={`absolute top-[8px] left-[159px] w-[41px] h-[60px] object-contain
                   transition-all duration-[700ms] ease-out delay-[900ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}`}
               />
@@ -61,14 +61,14 @@ export function HeroSection() {
             {/* MÙA VỤ / KHỞI SẮC */}
             <div className="mt-[67px] ml-[40px] overflow-hidden">
               <h1
-                className={`font-playfair text-[70px] font-semibold leading-none text-light-yellow-3
+                className={`font-playfair text-[78px] font-semibold leading-none text-light-yellow-3
                   transition-all duration-[800ms] ease-out delay-[500ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
                 MÙA VỤ
               </h1>
               <h1
-                className={`font-playfair text-[70px] font-semibold leading-none text-light-yellow-3 mt-6
+                className={`font-playfair text-[78px] font-semibold leading-none text-light-yellow-3 mt-6
                   transition-all duration-[800ms] ease-out delay-[650ms]
                   ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
@@ -80,23 +80,32 @@ export function HeroSection() {
 
         {/* Seedling Icon */}
         {/* CTA Button */}
-        <a
-          href="#"
-          className={`absolute left-[93px] top-[610px] flex items-center justify-center gap-2 w-[268px] h-[64px] rounded-2xl bg-cta-yellow hover:bg-yellow-300 group
-            transition-all duration-[700ms] ease-out delay-[500ms]
-            ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+        <button
+          onClick={() => navigate("/register")}
+          className={`absolute left-[93px] top-[540px] flex items-center justify-center gap-2 w-[268px] h-[64px] rounded-2xl bg-cta-yellow overflow-hidden group
+    /* Hiệu ứng Load Page */
+    transition-[opacity,transform] duration-[700ms] ease-out delay-[500ms]
+    ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+  `}
         >
-          <span className="font-roboto text-[18px] font-medium text-black">
+          {/* Lớp nền chạy từ trái sang phải */}
+          <div
+            className="absolute inset-0 w-full h-full bg-yellow-300 translate-x-[-100%] 
+               group-hover:translate-x-0 transition-transform duration-500 ease-in-out"
+          />
+
+          {/* Nội dung nút (cần z-10 để nằm trên lớp nền) */}
+          <span className="relative z-10 font-roboto text-[18px] font-medium text-black">
             Tạo mùa vụ ngay
           </span>
-          <ArrowUpRightIcon className="w-6 h-6 text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
-        </a>
+          <ArrowUpRightIcon className="relative z-10 w-6 h-6 text-black group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
+        </button>
 
         {/* Seedling — mọc từ button lên */}
         <img
           src={paddyintro}
           alt="Seedling"
-          className="absolute left-[307px] top-[565px] w-12 h-12"
+          className="absolute left-[307px] top-[495px] w-12 h-12"
           style={{
             transformOrigin: "bottom center",
             transform: mounted
