@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ChevronDownIcon, ArrowUpRightIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import LogoBrowser from "../../assets/Logo-browser.png";
 import CornBackground from "../../assets/Corn-Background.png";
 
@@ -29,22 +30,28 @@ export function Navbar({
   hideLoginButton = false,
   hideNavBackground = false,
 }: NavbarProps) {
+  const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navigate = useNavigate();
 
   // Entrance animation
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
     return () => clearTimeout(t);
-  }, []);
+  }, [setMounted]);
 
   // Scroll: thêm background mờ khi cuộn xuống
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [setScrolled]);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <>
@@ -130,55 +137,95 @@ export function Navbar({
             className={`flex items-center gap-2.5 shrink-0 transition-all duration-[700ms] ease-out delay-[600ms]
             ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"}`}
           >
-            {!hideLoginButton && (
-              <button
-                onClick={() => navigate("/login")}
-                className={`flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 transition-all duration-200 group ${
-                  scrolled
-                    ? "border-gray-300 bg-gray-50 hover:bg-gray-100"
-                    : "border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15"
-                }`}
-              >
-                <span
-                  className={`font-roboto text-[16px] font-semibold leading-none transition-colors duration-200 ${
+            {isAuthenticated ? (
+              <>
+                <div
+                  className={`flex items-center gap-2 h-12 px-4 rounded-xl ${
                     scrolled
-                      ? "text-gray-800 group-hover:text-dark-olive"
-                      : "text-light-yellow-1 group-hover:text-white"
+                      ? "border-gray-300 bg-gray-50"
+                      : "border-light-yellow-1 backdrop-blur-[10px] bg-white/5"
                   }`}
                 >
-                  Đăng nhập
-                </span>
-                <ArrowUpRightIcon
-                  className={`w-4 h-4 transition-all duration-200 ${
+                  <span
+                    className={`font-roboto text-[14px] font-medium leading-none ${
+                      scrolled ? "text-gray-800" : "text-light-yellow-1"
+                    }`}
+                  >
+                    {user?.fullName || user?.email}
+                  </span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className={`flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 transition-all duration-200 group ${
                     scrolled
-                      ? "text-gray-800 group-hover:text-dark-olive group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      : "text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      ? "border-gray-300 bg-gray-50 hover:bg-gray-100"
+                      : "border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15"
                   }`}
-                />
-              </button>
-            )}
-            {!hideCreateButton && (
-              <button
-                onClick={() => navigate("/register")}
-                className="relative flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow transition-all duration-300 overflow-hidden group"
-              >
-                {/* Lớp màu nền chạy từ trái sang phải */}
-                <div
-                  className="absolute inset-0 w-full h-full bg-yellow-300 translate-x-[-100%] 
-               group-hover:translate-x-0 transition-transform duration-500 ease-in-out"
-                />
+                >
+                  <span
+                    className={`font-roboto text-[16px] font-semibold leading-none transition-colors duration-200 ${
+                      scrolled
+                        ? "text-gray-800 group-hover:text-dark-olive"
+                        : "text-light-yellow-1 group-hover:text-white"
+                    }`}
+                  >
+                    Đăng xuất
+                  </span>
+                </button>
+              </>
+            ) : (
+              <>
+                {!hideLoginButton && (
+                  <button
+                    onClick={() => navigate("/login")}
+                    className={`flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl border-2 transition-all duration-200 group ${
+                      scrolled
+                        ? "border-gray-300 bg-gray-50 hover:bg-gray-100"
+                        : "border-light-yellow-1 backdrop-blur-[10px] bg-white/5 hover:bg-white/15"
+                    }`}
+                  >
+                    <span
+                      className={`font-roboto text-[16px] font-semibold leading-none transition-colors duration-200 ${
+                        scrolled
+                          ? "text-gray-800 group-hover:text-dark-olive"
+                          : "text-light-yellow-1 group-hover:text-white"
+                      }`}
+                    >
+                      Đăng nhập
+                    </span>
+                    <ArrowUpRightIcon
+                      className={`w-4 h-4 transition-all duration-200 ${
+                        scrolled
+                          ? "text-gray-800 group-hover:text-dark-olive group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          : "text-light-yellow-1 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      }`}
+                    />
+                  </button>
+                )}
+                {!hideCreateButton && (
+                  <button
+                    onClick={() => navigate("/register")}
+                    className="relative flex items-center justify-center gap-1.5 h-12 px-6 rounded-xl bg-cta-yellow transition-all duration-300 overflow-hidden group"
+                  >
+                    {/* Lớp màu nền chạy từ trái sang phải */}
+                    <div
+                      className="absolute inset-0 w-full h-full bg-yellow-300 translate-x-[-100%] 
+                   group-hover:translate-x-0 transition-transform duration-500 ease-in-out"
+                    />
 
-                {/* Nội dung nằm trên lớp nền (z-10) */}
-                <span className="relative z-10 font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-300">
-                  Tạo Tài Khoản
-                </span>
+                    {/* Nội dung nằm trên lớp nền (z-10) */}
+                    <span className="relative z-10 font-roboto text-[16px] font-semibold leading-none text-dark-olive group-hover:text-black transition-colors duration-300">
+                      Tạo Tài Khoản
+                    </span>
 
-                <ArrowUpRightIcon
-                  className="relative z-10 w-4 h-4 text-dark-olive group-hover:text-black 
-               group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
-               transition-all duration-300"
-                />
-              </button>
+                    <ArrowUpRightIcon
+                      className="relative z-10 w-4 h-4 text-dark-olive group-hover:text-black 
+                   group-hover:translate-x-0.5 group-hover:-translate-y-0.5 
+                   transition-all duration-300"
+                    />
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>

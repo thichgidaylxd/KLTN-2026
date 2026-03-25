@@ -3,7 +3,18 @@
  * Trang dashboard cho người dùng đã đăng nhập
  * (Private Route - yêu cầu authentication)
  */
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../components/hooks/useAuth";
+
 export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <nav className="bg-white shadow-sm">
@@ -14,8 +25,14 @@ export default function Dashboard() {
                 Dashboard
               </h1>
             </div>
-            <div className="flex items-center">
-              <button className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-600">
+                Xin chào, {user?.fullName || user?.email}
+              </span>
+              <button
+                onClick={handleLogout}
+                className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
                 Đăng xuất
               </button>
             </div>
