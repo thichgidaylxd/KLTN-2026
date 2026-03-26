@@ -9,5 +9,8 @@ const Dashboard = lazy(() => import("../pages/Dashboard/Dashboard"));
  * Nếu chưa login thì sẽ bị redirect về trang chủ
  */
 export const privateRoutes = [
-
+    {
+        path: "/dashboard",
+        component: Dashboard,
+    },
 ];
