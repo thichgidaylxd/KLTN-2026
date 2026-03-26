@@ -1,12 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Navbar } from "../../components/layout/Navbar";
+import { useAuth } from "../../components/hooks/useAuth";
 import LogoBrowser from "../../assets/Logo-browser.png";
 import RegisterOTP from "../../assets/Register-OTP.png";
-
-interface OTPVerificationProps {
-  email?: string;
-  onVerify?: (otp: string) => void;
-}
 
 const spinStyle = `
   @keyframes logoSpin {
@@ -16,13 +13,22 @@ const spinStyle = `
   }
 `;
 
-const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
-  email = "example@gmail.com",
-  onVerify,
-}) => {
-  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+export default function OTPVerification() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { verifyOTP, loading, error, isAuthenticated } = useAuth();
+  
   const [mounted, setMounted] = useState(false);
+  const [otpArray, setOtpArray] = useState<string[]>(["", "", "", "", "", ""]);
+  
+  const updateOtpField = (index: number, value: string) => {
+    const newOtp = [...otpArray];
+    newOtp[index] = value;
+    setOtpArray(newOtp);
+  };
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const email = (location.state?.email as string) || "example@gmail.com";
 
   // Trigger entrance animation after mount
   useEffect(() => {
@@ -30,16 +36,22 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
     return () => clearTimeout(t);
   }, []);
 
+  // Redirect if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleChange = (index: number, value: string) => {
     // Only allow digits
     if (!/^\d*$/.test(value)) return;
 
-    const newOtp = [...otp];
-    newOtp[index] = value.slice(0, 1);
-    setOtp(newOtp);
+    const newValue = value.slice(0, 1);
+    updateOtpField(index, newValue);
 
     // Auto-focus to next input
-    if (value && index < 5) {
+    if (newValue && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -48,7 +60,7 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
+    if (e.key === "Backspace" && !otpArray[index] && index > 0) {
       inputRefs.current[index - 1]?.focus();
     } else if (e.key === "ArrowLeft" && index > 0) {
       inputRefs.current[index - 1]?.focus();
@@ -69,21 +81,25 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
       while (newOtp.length < 6) {
         newOtp.push("");
       }
-      setOtp(newOtp);
+      setOtpArray(newOtp);
 
       const focusIndex = Math.min(pastedData.length, 5);
       inputRefs.current[focusIndex]?.focus();
     }
   };
 
-  const handleVerify = () => {
-    const otpCode = otp.join("");
+  const handleVerify = async () => {
+    const otpCode = otpArray.join("");
     if (otpCode.length === 6) {
-      onVerify?.(otpCode);
+      try {
+        await verifyOTP({ email, otp: otpCode });
+      } catch (err) {
+        console.error("OTP verification error:", err);
+      }
     }
   };
 
-  const isComplete = otp.every((digit) => digit !== "");
+  const isComplete = otpArray.every((digit) => digit !== "");
 
   return (
     <div
@@ -202,7 +218,7 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
                     type="text"
                     inputMode="numeric"
                     maxLength={1}
-                    value={otp[index]}
+                    value={otpArray[index] || ""}
                     onChange={(e) => handleChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
@@ -215,15 +231,24 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
               {/* Verify Button */}
               <button
                 onClick={handleVerify}
-                disabled={!isComplete}
+                disabled={!isComplete || loading}
                 className={`w-full py-4 rounded-lg font-roboto font-semibold text-white transition mb-4 ${
-                  isComplete
+                  isComplete && !loading
                     ? "bg-yellow-400 hover:bg-yellow-500 cursor-pointer"
                     : "bg-gray-400 cursor-not-allowed opacity-50"
                 }`}
               >
-                Xác thực
+                {loading ? "Đang xác thực..." : "Xác thực"}
               </button>
+
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 rounded-lg bg-red-100 border border-red-400">
+                  <p className="font-roboto text-[13px] text-red-700">
+                    {error}
+                  </p>
+                </div>
+              )}
 
               {/* Resend Link */}
               <div className="text-center">
@@ -243,6 +268,4 @@ const OTPVerificationPage: React.FC<OTPVerificationProps> = ({
       </>
     </div>
   );
-};
-
-export default OTPVerificationPage;
+}

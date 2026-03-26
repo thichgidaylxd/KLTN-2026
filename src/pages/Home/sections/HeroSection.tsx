@@ -1,20 +1,21 @@
 import { ArrowUpRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import CornBackground from "../../../assets/Corn-Background.png";
 import Water from "../../../assets/Water.png";
 import LogoIntro from "../../../assets/Logo-intro.png";
 import paddyintro from "../../../assets/paddy-intro.png";
 
 export function HeroSection() {
-  const [mounted, setMounted] = useState(false);
   const navigate = useNavigate();
+  const [heroMounted, setHeroMounted] = useState(false);
 
   // Trigger entrance animations after mount
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50);
+    const t = setTimeout(() => setHeroMounted(true), 50);
     return () => clearTimeout(t);
-  }, []);
+  }, [setHeroMounted]);
 
   return (
     <section className="relative w-full min-h-[calc(120vh-80px)] pb-0">
@@ -23,7 +24,7 @@ export function HeroSection() {
         <img
           src={CornBackground}
           className={`w-full h-full object-cover transition-all duration-[1800ms] ease-out ${
-            mounted ? "opacity-100 scale-100" : "opacity-0 scale-105"
+            heroMounted ? "opacity-100 scale-100" : "opacity-0 scale-105"
           }`}
         />
       </div>
@@ -38,7 +39,7 @@ export function HeroSection() {
               <span
                 className={`font-playfair text-[220px] font-semibold leading-none text-light-yellow-2 block mr-[30px] mt-[40px]
                   transition-all duration-[900ms] ease-out delay-[200ms]
-                  ${mounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"}`}
+                  ${heroMounted ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-16"}`}
               >
                 AI
               </span>
@@ -48,14 +49,14 @@ export function HeroSection() {
                 alt="Corn drop"
                 className={`absolute top-[8px] left-[159px] w-[41px] h-[60px] object-contain
                   transition-all duration-[700ms] ease-out delay-[900ms]
-                  ${mounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}`}
+                  ${heroMounted ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-6"}`}
               />
             </div>
 
             {/* Vertical line */}
             <div
               className={`w-[1px] bg-gradient-to-b from-light-yellow-1/50 via-light-yellow-2/30 to-transparent mt-[28px] mx-[-24px] transition-all duration-[600ms] ease-out delay-[400ms]
-                ${mounted ? "h-[327px] opacity-100" : "h-0 opacity-0"}`}
+                ${heroMounted ? "h-[327px] opacity-100" : "h-0 opacity-0"}`}
             />
 
             {/* MÙA VỤ / KHỞI SẮC */}
@@ -63,14 +64,14 @@ export function HeroSection() {
               <h1
                 className={`font-playfair text-[78px] font-semibold leading-none text-light-yellow-3
                   transition-all duration-[800ms] ease-out delay-[500ms]
-                  ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+                  ${heroMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
                 MÙA VỤ
               </h1>
               <h1
                 className={`font-playfair text-[78px] font-semibold leading-none text-light-yellow-3 mt-6
                   transition-all duration-[800ms] ease-out delay-[650ms]
-                  ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
+                  ${heroMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
               >
                 KHỞI SẮC
               </h1>
@@ -85,7 +86,7 @@ export function HeroSection() {
           className={`absolute left-[93px] top-[540px] flex items-center justify-center gap-2 w-[268px] h-[64px] rounded-2xl bg-cta-yellow overflow-hidden group
     /* Hiệu ứng Load Page */
     transition-[opacity,transform] duration-[700ms] ease-out delay-[500ms]
-    ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
+    ${heroMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}
   `}
         >
           {/* Lớp nền chạy từ trái sang phải */}
@@ -108,10 +109,10 @@ export function HeroSection() {
           className="absolute left-[307px] top-[495px] w-12 h-12"
           style={{
             transformOrigin: "bottom center",
-            transform: mounted
+            transform: heroMounted
               ? "scaleY(1) translateY(0)"
               : "scaleY(0) translateY(100%)",
-            opacity: mounted ? 1 : 0,
+            opacity: heroMounted ? 1 : 0,
             transition:
               "transform 0.8s ease-out 1s, opacity 0.4s ease-out 1.2s",
             zIndex: -1,
@@ -122,7 +123,7 @@ export function HeroSection() {
         <div
           className={`absolute right-[121px] top-[200px] w-[323px] h-[451px] rounded-[40px] overflow-hidden backdrop-blur-[8px]
             transition-all duration-[1000ms] ease-out delay-[600ms]
-            ${mounted ? "opacity-100 translate-x-0" : "opacity-0 translate-x-16"}`}
+            ${heroMounted ? "opacity-100 translate-x-0" : "opacity-0 translate-x-16"}`}
           style={{
             background:
               "linear-gradient(0deg, rgba(236, 240, 164, 0.4) 0%, rgba(220, 218, 173, 0.4) 100%)",
