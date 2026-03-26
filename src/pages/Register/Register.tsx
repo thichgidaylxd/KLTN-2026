@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { RegisterFormData } from "../../types/auth";
+import { useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Navbar } from "../../components/layout/Navbar";
+import { useAuth } from "../../components/hooks/useAuth";
 import LogoBrowser from "../../assets/Logo-browser.png";
 import LoginBackground from "../../assets/Login-Background.png";
 
@@ -13,10 +16,13 @@ const spinStyle = `
 `;
 
 export default function Register() {
+  const navigate = useNavigate();
+  const { register, loading, error } = useAuth();
+  
   const [mounted, setMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const [registerForm, setRegisterForm] = useState<RegisterFormData>({
     firstName: "",
     lastName: "",
     email: "",
@@ -24,23 +30,56 @@ export default function Register() {
     confirmPassword: "",
   });
 
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
+  const toggleShowConfirmPassword = () => setShowConfirmPassword((prev) => !prev);
+  const updateRegisterField = (
+    field: keyof RegisterFormData,
+    value: string,
+  ) => {
+    setRegisterForm((prev) => ({ ...prev, [field]: value }));
+  };
+  const resetRegisterForm = () => {
+    setRegisterForm({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
+  // Trigger animation on mount
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
-  }, []);
+    return () => {
+      clearTimeout(t);
+      setMounted(false);
+    };
+  }, [setMounted]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    updateRegisterField(
+      name as
+        | "firstName"
+        | "lastName"
+        | "email"
+        | "password"
+        | "confirmPassword",
+      value,
+    );
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Register:", formData);
-    // TODO: Call API register
+    try {
+      await register(registerForm);
+      // Redirect to OTP verification page
+      navigate("/otp-verification", { state: { email: registerForm.email } });
+      resetRegisterForm();
+    } catch (err) {
+      console.error("Register error:", err);
+    }
   };
 
   return (
@@ -122,7 +161,7 @@ export default function Register() {
                   type="text"
                   name="firstName"
                   placeholder="Nguyễn Văn..."
-                  value={formData.firstName}
+                  value={registerForm.firstName}
                   onChange={handleChange}
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -137,7 +176,7 @@ export default function Register() {
                   type="text"
                   name="lastName"
                   placeholder="Nhập tên"
-                  value={formData.lastName}
+                  value={registerForm.lastName}
                   onChange={handleChange}
                   className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -158,7 +197,7 @@ export default function Register() {
                 type="email"
                 name="email"
                 placeholder="example@gmail.com"
-                value={formData.email}
+                value={registerForm.email}
                 onChange={handleChange}
                 className="w-full px-3 py-1.5 border border-gray-300 rounded-lg
                 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -179,7 +218,7 @@ export default function Register() {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="Phải mạnh"
-                  value={formData.password}
+                  value={registerForm.password}
                   onChange={handleChange}
                   className="w-full px-3 py-1.5 pr-10 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -187,7 +226,7 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={toggleShowPassword}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? (
@@ -212,7 +251,7 @@ export default function Register() {
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Phải mạnh"
-                  value={formData.confirmPassword}
+                  value={registerForm.confirmPassword}
                   onChange={handleChange}
                   className="w-full px-3 py-1.5 pr-10 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -220,7 +259,7 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={toggleShowConfirmPassword}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showConfirmPassword ? (
@@ -235,7 +274,8 @@ export default function Register() {
             {/* Create Account Button */}
             <button
               type="submit"
-              className={`w-full py-1.5 mt-1 rounded-lg bg-dark-olive hover:bg-dark-olive/90
+              disabled={loading}
+              className={`w-full py-1.5 mt-1 rounded-lg bg-dark-olive hover:bg-dark-olive/90 disabled:bg-gray-400
               transition-all duration-300 font-roboto text-[13px] font-semibold
               text-white relative overflow-hidden group
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
@@ -248,9 +288,21 @@ export default function Register() {
               translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
               />
               <span className="relative z-10 flex items-center justify-center gap-2">
-                Tạo Tài Khoản
+                {loading ? "Đang Tạo..." : "Tạo Tài Khoản"}
               </span>
             </button>
+
+            {/* Error Message */}
+            {error && (
+              <div
+                className={`transition-all duration-300 rounded-lg
+                ${mounted ? "opacity-100" : "opacity-0"}`}
+              >
+                <p className="font-roboto text-[13px] text-red-600 bg-red-50 p-3 rounded-lg">
+                  {error}
+                </p>
+              </div>
+            )}
 
             {/* Divider */}
             <div

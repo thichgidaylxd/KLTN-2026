@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { LoginFormData } from "../../types/auth";
+import { useNavigate } from "react-router-dom";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Navbar } from "../../components/layout/Navbar";
+import { useAuth } from "../../components/hooks/useAuth";
 import LoginBackground from "../../assets/Login-Background.png";
 import LogoBrowser from "../../assets/Logo-browser.png";
 
@@ -13,30 +16,53 @@ const spinStyle = `
 `;
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { login, loading, error, isAuthenticated } = useAuth();
+  
   const [mounted, setMounted] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
+  const [loginForm, setLoginForm] = useState<LoginFormData>({
     email: "",
     password: "",
   });
 
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
+  const updateLoginField = (field: "email" | "password", value: string) => {
+    setLoginForm((prev) => ({ ...prev, [field]: value }));
+  };
+  const resetLoginForm = () => {
+    setLoginForm({ email: "", password: "" });
+  };
+
+  // Trigger animation on mount
   useEffect(() => {
     const t = setTimeout(() => setMounted(true), 100);
-    return () => clearTimeout(t);
-  }, []);
+    return () => {
+      clearTimeout(t);
+      setMounted(false);
+    };
+  }, [setMounted]);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    updateLoginField(name as "email" | "password", value);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Login:", formData);
-    // TODO: Call API login
+    try {
+      await login(loginForm);
+      resetLoginForm();
+    } catch (err) {
+      console.error("Login error:", err);
+    }
   };
 
   return (
@@ -125,7 +151,7 @@ export default function Login() {
                 type="email"
                 name="email"
                 placeholder="example@gmail.com"
-                value={formData.email}
+                value={loginForm.email}
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border border-gray-300 rounded-lg
                 focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -146,7 +172,7 @@ export default function Login() {
                   type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="••••••••••"
-                  value={formData.password}
+                  value={loginForm.password}
                   onChange={handleChange}
                   className="w-full px-3 py-2.5 pr-10 border border-gray-300 rounded-lg
                   focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-300 transition-all duration-200
@@ -154,7 +180,7 @@ export default function Login() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={toggleShowPassword}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? (
@@ -179,10 +205,23 @@ export default function Login() {
               </a>
             </div>
 
+            {/* Error Message */}
+            {error && (
+              <div
+                className={`transition-all duration-300 rounded-lg
+                ${mounted ? "opacity-100" : "opacity-0"}`}
+              >
+                <p className="font-roboto text-[13px] text-red-600 bg-red-50 p-3 rounded-lg">
+                  {error}
+                </p>
+              </div>
+            )}
+
             {/* Login Button */}
             <button
               type="submit"
-              className={`w-full py-2.5 mt-3 rounded-lg bg-dark-olive hover:bg-dark-olive/90
+              disabled={loading}
+              className={`w-full py-2.5 mt-3 rounded-lg bg-dark-olive hover:bg-dark-olive/90 disabled:bg-gray-400
               transition-all duration-300 font-roboto text-[14px] font-semibold
               text-white relative overflow-hidden group
               ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
@@ -195,7 +234,7 @@ export default function Login() {
               translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
               />
               <span className="relative z-10 flex items-center justify-center gap-2">
-                Đăng nhập
+                {loading ? "Đang đăng nhập..." : "Đăng nhập"}
               </span>
             </button>
 
