@@ -17,10 +17,6 @@ export const publicRoutes = [
     component: Home,
   },
   {
-    path: "/dashboard",
-    component: Dashboard,
-  },
-  {
     path: "/login",
     component: Login,
   },
